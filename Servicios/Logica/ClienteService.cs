@@ -15,6 +15,10 @@ namespace Servicios.Logica
             clientesRepository=new ClientesRepository(connectionString);
             
         }
+        public List<Clientesmodelo> listado()
+        {
+            return clientesRepository.list();
+        }
         public bool insertar(Clientesmodelo cliente)
         {
             if (validardatos(cliente))
