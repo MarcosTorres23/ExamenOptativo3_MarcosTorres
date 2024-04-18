@@ -14,12 +14,12 @@ namespace Repository.Data.Facturas
     {
         NpgsqlConnection connection;
         ConnectionDB claseConexion;
-        public FacturaRepository()
+        public FacturaRepository(string connectionString)
         {
 
-            connection = new ConnectionDB().OpenConnection();
+            connection = new ConnectionDB(connectionString).OpenConnection();
         }
-        public bool add(Facturasmodelo facturasmodel)
+        public bool Add(Facturasmodelo facturasmodel)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace Repository.Data.Facturas
 
         }
 
-        public bool update(Facturasmodelo facturasmodel)
+        public bool Update(Facturasmodelo facturasmodel)
         {
             try
             {

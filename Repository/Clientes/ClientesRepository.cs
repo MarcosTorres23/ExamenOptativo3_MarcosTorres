@@ -13,12 +13,12 @@ namespace Repository.Clientes
 
         NpgsqlConnection connection;
         ConnectionDB claseConexion;
-        public ClientesRepository()
+        public ClientesRepository(string connectionString)
         {
         
-            connection = new ConnectionDB().OpenConnection();
+            connection = new ConnectionDB(connectionString).OpenConnection();
         }
-        public bool add(Clientesmodelo clientemodel)
+        public bool Add(Clientesmodelo clientemodel)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace Repository.Clientes
 
         }
 
-        public bool update(Clientesmodelo clientemodel)
+        public bool Update(Clientesmodelo clientemodel)
         {
             try
             {
