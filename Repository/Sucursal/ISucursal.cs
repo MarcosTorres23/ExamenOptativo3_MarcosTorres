@@ -5,6 +5,7 @@ using System.Text;
 using Repository.Data.ConfiguracionDB;
 using Dapper;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace Repository.Sucursal
 {

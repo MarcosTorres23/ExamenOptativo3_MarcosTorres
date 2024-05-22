@@ -8,11 +8,13 @@ using Repository.Clientes;
 using Repository.Data.ConfiguracionDB;
 using Dapper;
 using Repository.Facturas;
+using System.Data;
 
 
 namespace Repository.Data.Facturas
 {
-    public class FacturaRepository :IFacturas {
+    public class FacturaRepository :IFacturas 
+    {
 
         IDbConnection connection;
        

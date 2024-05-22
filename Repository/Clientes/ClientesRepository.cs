@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using Dapper;
 using Repository.Data.ConfiguracionDB;
+using System.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
