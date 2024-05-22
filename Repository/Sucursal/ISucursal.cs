@@ -9,7 +9,7 @@ using System.Data;
 
 namespace Repository.Sucursal
 {
-    internal class ISucursal
+    internal interface ISucursal
     {
         bool add(Sucursalmodelo sucursalmodelo);
         bool update(Sucursalmodelo sucursalmodelo);
