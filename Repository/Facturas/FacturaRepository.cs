@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 using Npgsql;
 using Repository.Clientes;
 using Repository.Data.ConfiguracionDB;
+using Dapper;
+using Repository.Facturas;
 
 
 namespace Repository.Data.Facturas
 {
-    public class FacturaRepository
-    {
-        NpgsqlConnection connection;
-        ConnectionDB claseConexion;
+    public class FacturaRepository :IFacturas {
+
+        IDbConnection connection;
+       
         public FacturaRepository(string connectionString)
         {
 
@@ -23,21 +25,11 @@ namespace Repository.Data.Facturas
         {
             try
             {
-                var cmd = connection.CreateCommand();
-                cmd.CommandText = "INSER INTO facturas(id_cliente,nro_factura,fecha_hora,total,total_iva5,total_iva10,total_iva,total_letras,sucursal)" +
-                    $"Values("+
-                    $"'{facturasmodel.id_cliente}'," +
-                    $"'{facturasmodel.nro_factura}'," +
-                    $"'{facturasmodel.fecha_hora}'," +
-                    $"'{facturasmodel.total}'," +
-                    $"'{facturasmodel.total_iva5}'," +
-                    $"'{facturasmodel.total_iva10}'," +
-                    $"'{facturasmodel.total_iva}'," +
-                    $"'{facturasmodel.total_letras}'," +
-                    $"'{facturasmodel.sucursal}',)"
-                    ;
-                cmd.ExecuteNonQuery();
-                connection.Close();
+
+                connection.Execute("INSER INTO facturas(id_cliente,nro_factura,fecha_hora,total,total_iva5,total_iva10,total_iva,total_letras,sucursal)" +
+                    $"Values(@id_cliente,@nro_factura,@fecha_hora,@total,@total_iva5,@total_iva10,@total_iva,@total_letras,@sucursal)", facturasmodel);
+                    
+                
                 return true;
             }
             catch (Exception ex)
@@ -47,26 +39,31 @@ namespace Repository.Data.Facturas
             }
 
         }
-
-        public bool Update(Facturasmodelo facturasmodel)
+        public IEnumerable<Facturasmodelo> GetAll()
+        {
+            return connection.Query<Facturasmodelo>("SELECT * FROM persona");
+        }
+        public bool delete(int id)
+        {
+            connection.Execute($"DELETE FROM factura WHERE id ={ id}");
+            return true;
+        }
+      
+        public bool update(Facturasmodelo facturasmodel)
         {
             try
             {
-                var cmd = connection.CreateCommand();
-                cmd.CommandText = "UPDATE INTO facturas(id_cliente,nro_factura,fecha_hora,total,total_iva5,total_iva10,total_iva,total_letras,sucursal)" +
-                    $"Values(" +
-                    $"'{facturasmodel.id_cliente}'," +
-                    $"'{facturasmodel.nro_factura}'," +
-                    $"'{facturasmodel.fecha_hora}'," +
-                    $"'{facturasmodel.total}'," +
-                    $"'{facturasmodel.total_iva5}'," +
-                    $"'{facturasmodel.total_iva10}'," +
-                    $"'{facturasmodel.total_iva}'," +
-                    $"'{facturasmodel.total_letras}'," +
-                    $"'{facturasmodel.sucursal}',)"
-                    ;
-                cmd.ExecuteNonQuery();
-                connection.Close();
+                connection.Execute("UPDATE facturas SET" +
+                    " @id_cliente," +
+                    " @nro_factura," +
+                    " @fecha_hora," +
+                    " @total," +
+                    " @total_iva5, " +
+                    " @total_iva ," +
+                    " @total_letras ," +
+                    " @sucursal" +
+                    $"WHERE id = @id", facturasmodel;
+                    
                 return true;
             }
             catch (Exception ex)
