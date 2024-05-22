@@ -13,7 +13,7 @@ namespace Repository.Sucursal
     {
         bool add(Sucursalmodelo sucursalmodelo);
         bool update(Sucursalmodelo sucursalmodelo);
-        bool delete(Sucursalmodelo sucursalmodelo);
+        bool delete(int id);
         IEnumerable<Sucursalmodelo> GetALL();
     
 
