@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Sucursal
 {
-    public class SucursalRepository : ISucursal
+    public class SucursalRepository : ISucursal 
     {
         IDbConnection connection;
 
