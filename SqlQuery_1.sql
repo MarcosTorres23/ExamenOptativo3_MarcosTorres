@@ -17,6 +17,16 @@ CREATE TABLE IF NOT EXISTS public.clientes
     CONSTRAINT clientes_pkey PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS public.detalle_factura
+(
+    id integer NOT NULL,
+    id_factura integer NOT NULL,
+    id_producto integer NOT NULL,
+    cantidad_producto numeric NOT NULL,
+    subtotal numeric NOT NULL,
+    CONSTRAINT detalle_factura_pkey PRIMARY KEY (id)
+);
+
 CREATE TABLE IF NOT EXISTS public.facturas
 (
     id integer NOT NULL DEFAULT nextval('facturas_id_seq'::regclass),
@@ -33,6 +43,20 @@ CREATE TABLE IF NOT EXISTS public.facturas
     CONSTRAINT facturas_pkey PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS public.productos
+(
+    id integer NOT NULL DEFAULT nextval('productos_id_seq'::regclass),
+    descripcion character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    cantidad_minima integer NOT NULL,
+    cantidad_stock integer NOT NULL,
+    precio_compra integer NOT NULL,
+    precio_venta numeric NOT NULL,
+    categoria character varying COLLATE pg_catalog."default" NOT NULL,
+    marca character varying COLLATE pg_catalog."default" NOT NULL,
+    estado character varying COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT productos_pkey PRIMARY KEY (id)
+);
+
 CREATE TABLE IF NOT EXISTS public.sucursal
 (
     id integer NOT NULL,
@@ -45,9 +69,28 @@ CREATE TABLE IF NOT EXISTS public.sucursal
     CONSTRAINT sucursal_pkey PRIMARY KEY (id)
 );
 
+ALTER TABLE IF EXISTS public.detalle_factura
+    ADD CONSTRAINT id_factura FOREIGN KEY (id_factura)
+    REFERENCES public.facturas (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.detalle_factura
+    ADD CONSTRAINT id_producto FOREIGN KEY (id_producto)
+    REFERENCES public.productos (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
 ALTER TABLE IF EXISTS public.facturas
     ADD CONSTRAINT id_cliente FOREIGN KEY (id_cliente)
     REFERENCES public.clientes (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.facturas
