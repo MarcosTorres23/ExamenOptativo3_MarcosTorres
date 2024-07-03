@@ -27,6 +27,16 @@ CREATE TABLE IF NOT EXISTS public.detalle_factura
     CONSTRAINT detalle_factura_pkey PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS public.detalle_pedido
+(
+    id integer NOT NULL DEFAULT nextval('detalle_pedido_id_seq'::regclass),
+    id_pedido integer NOT NULL,
+    id_producto integer NOT NULL,
+    cantidad_producto integer NOT NULL,
+    subtotal integer NOT NULL,
+    CONSTRAINT detalle_pedido_pkey PRIMARY KEY (id)
+);
+
 CREATE TABLE IF NOT EXISTS public.facturas
 (
     id integer NOT NULL DEFAULT nextval('facturas_id_seq'::regclass),
@@ -43,6 +53,16 @@ CREATE TABLE IF NOT EXISTS public.facturas
     CONSTRAINT facturas_pkey PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS public.pedido_compra
+(
+    id integer NOT NULL DEFAULT nextval('pedido_compra_id_seq'::regclass),
+    id_proveedor integer NOT NULL,
+    id_sucursal integer NOT NULL,
+    fecha_hora date NOT NULL,
+    total integer NOT NULL,
+    CONSTRAINT pedido_compra_pkey PRIMARY KEY (id)
+);
+
 CREATE TABLE IF NOT EXISTS public.productos
 (
     id integer NOT NULL DEFAULT nextval('productos_id_seq'::regclass),
@@ -55,6 +75,19 @@ CREATE TABLE IF NOT EXISTS public.productos
     marca character varying COLLATE pg_catalog."default" NOT NULL,
     estado character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT productos_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS public.proveedor
+(
+    id integer NOT NULL DEFAULT nextval('proveedor_id_seq'::regclass),
+    razon_social integer NOT NULL,
+    tipo_doc character varying COLLATE pg_catalog."default" NOT NULL,
+    numero_doc integer NOT NULL,
+    direccion character varying COLLATE pg_catalog."default" NOT NULL,
+    mail character varying COLLATE pg_catalog."default" NOT NULL,
+    celular character varying COLLATE pg_catalog."default" NOT NULL,
+    estado character varying COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT proveedor_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS public.sucursal
@@ -85,6 +118,22 @@ ALTER TABLE IF EXISTS public.detalle_factura
     NOT VALID;
 
 
+ALTER TABLE IF EXISTS public.detalle_pedido
+    ADD CONSTRAINT id_pedido FOREIGN KEY (id_pedido)
+    REFERENCES public.pedido_compra (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.detalle_pedido
+    ADD CONSTRAINT id_producto FOREIGN KEY (id_producto)
+    REFERENCES public.productos (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
 ALTER TABLE IF EXISTS public.facturas
     ADD CONSTRAINT id_cliente FOREIGN KEY (id_cliente)
     REFERENCES public.clientes (id) MATCH SIMPLE
@@ -94,3 +143,16 @@ ALTER TABLE IF EXISTS public.facturas
 
 
 ALTER TABLE IF EXISTS public.facturas
+    ADD CONSTRAINT id_sucursal FOREIGN KEY (id_sucursal)
+    REFERENCES public.sucursal (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.pedido_compra
+    ADD CONSTRAINT id_proveedor FOREIGN KEY (id_proveedor)
+    REFERENCES public.proveedor (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
